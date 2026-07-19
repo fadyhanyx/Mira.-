@@ -89,6 +89,83 @@
     50%{transform:translateY(6px);}
   }
 
+  /* Modal Styles */
+  .modal-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.85);
+    z-index:100;
+    backdrop-filter:blur(4px);
+    animation:fadeIn 0.4s ease;
+  }
+
+  .modal-overlay.active{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  @keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+  }
+
+  .modal-content{
+    background:linear-gradient(135deg, var(--ink-soft) 0%, var(--ink) 100%);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:3rem 2rem;
+    max-width:500px;
+    width:90vw;
+    text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,0.6);
+    animation:slideUp 0.5s ease;
+  }
+
+  @keyframes slideUp{
+    from{transform:translateY(30px); opacity:0;}
+    to{transform:translateY(0); opacity:1;}
+  }
+
+  .modal-content h2{
+    font-family:'Amiri', serif;
+    font-size:clamp(1.8rem, 5vw, 2.4rem);
+    color:var(--gold-soft);
+    margin-bottom:1.5rem;
+    font-weight:700;
+  }
+
+  .modal-content p{
+    font-size:1.1rem;
+    color:rgba(242,236,225,0.75);
+    line-height:1.8;
+    margin-bottom:2rem;
+  }
+
+  .start-button{
+    font-family:'Cairo', sans-serif;
+    font-size:1.1rem;
+    padding:1.2rem 2.8rem;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    background:linear-gradient(90deg, var(--gold), var(--gold-soft));
+    color:var(--ink);
+    font-weight:600;
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow:0 10px 30px rgba(201, 161, 90, 0.3);
+  }
+
+  .start-button:hover{
+    transform:translateY(-3px);
+    box-shadow:0 15px 40px rgba(201, 161, 90, 0.5);
+  }
+
+  .start-button:active{
+    transform:translateY(-1px);
+  }
+
   .gap-section{ background:var(--ink); }
 
   .gap-label{
@@ -336,10 +413,54 @@
     50%{height:26px;}
   }
   #eqBars.paused .eq-bar{animation-play-state:paused; height:8px;}
+
+  /* Music player indicator */
+  .music-indicator{
+    position:fixed;
+    bottom:2rem;
+    right:2rem;
+    display:flex;
+    align-items:center;
+    gap:0.8rem;
+    padding:0.8rem 1.2rem;
+    background:rgba(201, 161, 90, 0.1);
+    border:1px solid var(--gold-soft);
+    border-radius:999px;
+    color:var(--gold-soft);
+    font-size:0.9rem;
+    z-index:50;
+    opacity:0;
+    transform:translateY(20px);
+    pointer-events:none;
+    transition:opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .music-indicator.active{
+    opacity:1;
+    transform:translateY(0);
+  }
 </style>
 </head>
 <body>
 <div class="stars" id="stars"></div>
+
+<!-- Start Modal -->
+<div class="modal-overlay" id="startModal">
+  <div class="modal-content">
+    <h2>ميرا في حاجة أقول لك 💌</h2>
+    <button class="start-button" id="startBtn">اضغطي هنا</button>
+  </div>
+</div>
+
+<!-- Music Indicator -->
+<div class="music-indicator" id="musicIndicator">
+  <span id="eqBarsIndicator">
+    <span class="eq-bar" style="display:inline-block;"></span>
+    <span class="eq-bar" style="display:inline-block;"></span>
+    <span class="eq-bar" style="display:inline-block;"></span>
+  </span>
+  <span>Rewrite the Stars</span>
+</div>
 
 <section class="hero">
   <div class="eyebrow">سنة وخمس شهور واحنا بعاد عن بعض</div>
@@ -377,7 +498,7 @@
     </p>
     <p style="font-family:'Amiri', serif; font-size:clamp(1.15rem,3vw,1.5rem); line-height:2.1; color:var(--paper); margin-top:1.6rem;">
       كان نفسي نقف مع بعض وناخد صورة للذكرى، حتى بس بالحظاظات — بس ماخدناهاش.
-      وقعدت قدام و كنت عمال كل شويه ابص لورا اشوفك بصالي ولا لا وكل ما كنت بشوفك كنت ببقى مبسوط اوي، وأنا باصصلك ومبتسم مش مصدق
+      وقعدت قدام و كنت عمال كل شويه ابص لورا اشوفك بصالي ولا لا وكل ما كنت بشوفك كنت ببقى مبسوط اوي، وأنا باصصل لك.
       إن دي حبيبتي، ومش مصدق إنك بتحبيني.
     </p>
     <p style="font-family:'Amiri', serif; font-weight:700; font-size:clamp(1.3rem,3.6vw,1.8rem); line-height:1.8; color:var(--rose); margin-top:2.2rem;">
@@ -385,35 +506,34 @@
     </p>
   </div>
 </section>
-  <section class="gap-section" style="min-height:auto;padding:7vh 6vw;">
-    <div class="gap-label">لسه فاكر...</div>
-    <div style="max-width:650px;text-align:center;font-family:'Amiri',serif;line-height:2.3;font-size:1.3rem;">
-        <p>فاكر أول مرة قولتيلي بحبك.</p>
-        <p>فاكر ضحكتك.</p>
-        <p>فاكر صوتك.</p>
-        <p> فاكر تاريخ ميلادك فاكر امتى اتكلمنا امتى اتقابلنا فاكر امتى ارتبطنا فاكر كل حاجه عنك.</p>
-        <p>فاكر كل التفاصيل الصغيرة اللي يمكن انتي نسيتيها...</p>
-        <p style="color:var(--gold-soft);font-style:italic;">
-                وعمري ما نسيت حاجه عنك.
-        </p>
-    </div>
-  </section>
+<section class="gap-section" style="min-height:auto;padding:7vh 6vw;">
+  <div class="gap-label">لسه فاكر...</div>
+  <div style="max-width:650px;text-align:center;font-family:'Amiri',serif;line-height:2.3;font-size:1.3rem;">
+      <p>فاكر أول مرة قولتيلي بحبك.</p>
+      <p>فاكر ضحكتك.</p>
+      <p>فاكر صوتك.</p>
+      <p> فاكر تاريخ ميلادك فاكر امتى اتكلمنا امتى اتقابلنا فاكر امتى ارتبطنا فاكر كل حاجه عنك.</p>
+      <p>فاكر كل التفاصيل الصغيرة اللي يمكن انتي نسيتيها...</p>
+      <p style="color:var(--gold-soft);font-style:italic;">
+              وعمري ما نسيت حاجه عنك.
+      </p>
+  </div>
+</section>
 
 <section class="gap-section" style="min-height:auto; padding:6vh 6vw;">
   <div class="gap-label" style="margin-bottom:1.6rem;">أغنيتنا</div>
   <div style="width:min(560px,90vw); text-align:center;">
     <div style="font-family:'Amiri',serif; font-style:italic; font-size:1.3rem; color:var(--gold-soft); margin-bottom:1.4rem;">Rewrite the Stars</div>
     <div style="position:relative; width:100%; border-radius:12px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4); background:var(--ink-soft); padding:2rem 1.5rem;">
-      <audio id="songPlayer" src="rewrite-the-stars.m4a" preload="auto" loop></audio>
+      <audio id="songPlayer" src="rewrite-the-stars.m4a" preload="auto" loop crossorigin="anonymous"></audio>
       <div style="display:flex; align-items:center; justify-content:center; gap:0.5rem; margin-bottom:1.4rem;" id="eqBars">
         <span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span>
       </div>
       <div style="font-size:0.95rem; color:rgba(242,236,225,0.7);">James Arthur &amp; Anne-Marie</div>
     </div>
-    <div style="margin-top:1.2rem; font-size:0.9rem; color:rgba(242,236,225,0.5);" id="musicHint">اغنيتك المفضلة نفسي نحققها انا وانتي مع بعض</div>
   </div>
 </section>
-  <section class="gap-section" style="min-height:45vh;">
+<section class="gap-section" style="min-height:45vh;">
 <blockquote style="font-family:'Amiri',serif;
 font-size:clamp(1.6rem,4vw,2.2rem);
 text-align:center;
@@ -423,7 +543,7 @@ line-height:2;">
 "لو كان في حاجة واحدة أتمنى أرجعها...
 فهتبقي انتي."
 </blockquote>
-  </section>
+</section>
 
 <section class="letter-section">
     <div class="letter" id="letter">
@@ -435,7 +555,7 @@ line-height:2;">
         </p>
         <p>
             كل يوم بعدنا كان بيعلمّني حاجة جديدة.
-            بقيت أراجع كل موقف بينا، وكل كلمة اتقالت، وكل لحظة كان ممكن أتصرف فيها بشكل أحسن.
+            ��قيت أراجع كل موقف بينا، وكل كلمة اتقالت، وكل لحظة كان ممكن أتصرف فيها بشكل أحسن.
             يمكن اتأخرت في الفهم... لكن عمري ما بطلت أتعلم من أخطائي.
         </p>
         <p>
@@ -481,8 +601,6 @@ line-height:2;">
         <div class="sign">— حبيبك ❤️</div>
     </div>
 </section>
-  
-</section
 
 <section class="cta-section">
   <p>
@@ -515,34 +633,36 @@ line-height:2;">
 <script>
   const songPlayer = document.getElementById('songPlayer');
   const eqBars = document.getElementById('eqBars');
-  let unmuted = false;
-  const musicHint = document.getElementById('musicHint');
+  const startModal = document.getElementById('startModal');
+  const startBtn = document.getElementById('startBtn');
+  const musicIndicator = document.getElementById('musicIndicator');
+  let musicStarted = false;
 
-  if(songPlayer){
-    songPlayer.muted = true;
-    songPlayer.play().catch(() => {});
-    if(eqBars) eqBars.classList.add('paused');
+  // عرض المودال في البداية
+  window.addEventListener('load', () => {
+    startModal.classList.add('active');
+  });
+
+  // عند الضغط على زر اضغطي هنا
+  startBtn.addEventListener('click', () => {
+    startModal.classList.remove('active');
+    playMusic();
+  });
+
+  function playMusic() {
+    if(musicStarted) return;
+    musicStarted = true;
+
+    if(songPlayer) {
+      songPlayer.volume = 0.7;
+      songPlayer.play().catch(err => {
+        console.log('Playback failed:', err);
+      });
+      
+      if(eqBars) eqBars.classList.remove('paused');
+      musicIndicator.classList.add('active');
+    }
   }
-
-  function tryUnmute(){
-    if(unmuted || !songPlayer) return;
-    songPlayer.muted = false;
-    songPlayer.volume = 0.7;
-    songPlayer.play().catch(() => {});
-    if(eqBars) eqBars.classList.remove('paused');
-    unmuted = true;
-    if(musicHint) musicHint.textContent = 'اغنيتك المفضلة يا عيوني اللي بعتهالي';
-    window.removeEventListener('click', tryUnmute);
-    window.removeEventListener('scroll', tryUnmute);
-    window.removeEventListener('keydown', tryUnmute);
-    window.removeEventListener('touchstart', tryUnmute);
-  }
-
-  if(musicHint) musicHint.textContent = 'دوسي أو مرري عشان الصوت يشتغل';
-  window.addEventListener('click', tryUnmute);
-  window.addEventListener('scroll', tryUnmute);
-  window.addEventListener('keydown', tryUnmute);
-  window.addEventListener('touchstart', tryUnmute);
 
   const starsContainer = document.getElementById('stars');
   const starCount = window.innerWidth < 600 ? 26 : 46;
