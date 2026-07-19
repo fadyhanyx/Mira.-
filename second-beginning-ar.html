@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سنة وخمس شهور</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;500;600&display=swap');
+
+  :root{
+    --ink:#161b22;
+    --ink-soft:#232a35;
+    --paper:#f2ece1;
+    --gold:#c9a15a;
+    --gold-soft:#e3c98f;
+    --rose:#b47b7f;
+    --line: rgba(242,236,225,0.14);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Cairo', sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  section{
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:8vh 6vw;
+    position:relative;
+  }
+
+  .hero .eyebrow{
+    font-size:0.85rem;
+    letter-spacing:0.08em;
+    color:var(--gold-soft);
+    opacity:0;
+    animation:rise 1.4s ease forwards;
+    margin-bottom:2rem;
+  }
+
+  .hero h1{
+    font-family:'Amiri', serif;
+    font-weight:700;
+    font-size:clamp(2.1rem, 8vw, 4.2rem);
+    text-align:center;
+    line-height:1.4;
+    max-width:16ch;
+    opacity:0;
+    animation:rise 1.4s ease 0.5s forwards;
+  }
+
+  .hero .sub{
+    margin-top:2rem;
+    font-size:1rem;
+    color:rgba(242,236,225,0.55);
+    opacity:0;
+    animation:rise 1.4s ease 1.1s forwards;
+  }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:6vh;
+    font-size:0.8rem;
+    color:rgba(242,236,225,0.4);
+    opacity:0;
+    animation:rise 1.4s ease 1.8s forwards, bob 2.4s ease-in-out 3.2s infinite;
+  }
+
+  @keyframes rise{
+    from{opacity:0; transform:translateY(16px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes bob{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(6px);}
+  }
+
+  .gap-section{ background:var(--ink); }
+
+  .gap-label{
+    font-size:0.85rem;
+    letter-spacing:0.06em;
+    color:var(--gold-soft);
+    margin-bottom:3.5rem;
+    text-align:center;
+  }
+
+  .gap-track{
+    width:min(560px, 84vw);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1.2rem;
+  }
+
+  .gap-line{
+    width:100%;
+    height:1px;
+    background:var(--line);
+    position:relative;
+  }
+
+  .gap-fill{
+    position:absolute;
+    top:-1px;
+    right:0;
+    height:3px;
+    width:0%;
+    background:linear-gradient(270deg, var(--rose), var(--gold));
+    transition:width 2.2s cubic-bezier(.22,.85,.4,1);
+  }
+
+  .gap-points{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:-1.6rem;
+  }
+
+  .gap-dot{
+    width:10px; height:10px; border-radius:50%;
+    background:var(--paper);
+    box-shadow:0 0 0 6px var(--ink);
+  }
+
+  .gap-caption{
+    display:flex;
+    justify-content:space-between;
+    width:100%;
+    font-size:0.9rem;
+    color:rgba(242,236,225,0.65);
+    margin-top:0.4rem;
+  }
+
+  .gap-time{
+    margin-top:3rem;
+    font-family:'Amiri', serif;
+    font-style:italic;
+    font-size:clamp(1.4rem,4.4vw,2.1rem);
+    text-align:center;
+    color:var(--gold-soft);
+    line-height:1.6;
+    opacity:0;
+    transition:opacity 1.4s ease 1.2s;
+  }
+
+  .gap-track.in-view .gap-fill{width:100%;}
+  .gap-track.in-view .gap-time{opacity:1;}
+
+  .letter-section{
+    background:var(--paper);
+    color:var(--ink);
+    align-items:center;
+  }
+
+  .letter{
+    max-width:680px;
+    display:flex;
+    flex-direction:column;
+    gap:1.7rem;
+  }
+
+  .letter p{
+    font-family:'Amiri', serif;
+    font-weight:400;
+    font-size:clamp(1.25rem, 3vw, 1.7rem);
+    line-height:1.9;
+    text-align:center;
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity 1s ease, transform 1s ease;
+  }
+
+  .letter p.visible{opacity:1; transform:translateY(0);}
+
+  .letter p.lead{
+    font-weight:700;
+    font-size:clamp(1.6rem, 4.6vw, 2.3rem);
+    color:var(--rose);
+  }
+
+  .letter .sign{
+    margin-top:1rem;
+    font-family:'Cairo', sans-serif;
+    font-size:0.95rem;
+    color:rgba(22,27,34,0.55);
+  }
+
+  .cta-section{
+    background:var(--ink);
+    text-align:center;
+  }
+
+  .cta-eyebrow{
+    font-size:0.85rem;
+    letter-spacing:0.06em;
+    color:var(--gold-soft);
+    margin-bottom:1.6rem;
+  }
+
+  .cta-section h2{
+    font-family:'Amiri', serif;
+    font-weight:700;
+    font-size:clamp(1.7rem, 5.6vw, 2.7rem);
+    max-width:18ch;
+    line-height:1.5;
+    margin-bottom:3rem;
+  }
+
+  .cta-buttons{
+    display:flex;
+    gap:1.2rem;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  button.choice{
+    font-family:'Cairo', sans-serif;
+    font-size:1rem;
+    padding:1rem 2.2rem;
+    border-radius:999px;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+  }
+
+  button.choice:focus-visible{
+    outline:2px solid var(--gold-soft);
+    outline-offset:3px;
+  }
+
+  .choice.primary{
+    background:linear-gradient(90deg, var(--gold), var(--gold-soft));
+    color:var(--ink);
+    font-weight:600;
+  }
+  .choice.primary:hover{transform:translateY(-2px);}
+
+  .choice.secondary{
+    background:transparent;
+    color:rgba(242,236,225,0.7);
+    border-color:var(--line);
+  }
+  .choice.secondary:hover{
+    border-color:rgba(242,236,225,0.4);
+    color:var(--paper);
+  }
+
+  .response{
+    margin-top:2.6rem;
+    font-family:'Amiri', serif;
+    font-style:italic;
+    font-size:clamp(1.25rem,3.4vw,1.8rem);
+    color:var(--gold-soft);
+    max-width:38ch;
+    opacity:0;
+    height:0;
+    overflow:hidden;
+    transition:opacity 0.8s ease;
+  }
+  .response.shown{opacity:1; height:auto; margin-top:2.6rem;}
+
+  footer{
+    text-align:center;
+    padding:3rem 6vw 4rem;
+    font-size:0.8rem;
+    color:rgba(242,236,225,0.3);
+    background:var(--ink);
+  }
+
+  .stars{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    overflow:hidden;
+  }
+  .star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    border-radius:50%;
+    background:var(--gold-soft);
+    opacity:0.15;
+    animation:twinkle 5s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:0.08; transform:scale(1);}
+    50%{opacity:0.55; transform:scale(1.6);}
+  }
+  section, footer{position:relative; z-index:1;}
+
+  .pulse{
+    display:inline-block;
+    animation:heartbeat 2.6s ease-in-out infinite;
+  }
+  @keyframes heartbeat{
+    0%,100%{transform:scale(1);}
+    18%{transform:scale(1.12);}
+    32%{transform:scale(1);}
+    46%{transform:scale(1.08);}
+    60%{transform:scale(1);}
+  }
+
+  .eq-bar{
+    display:inline-block;
+    width:4px;
+    height:14px;
+    border-radius:2px;
+    background:linear-gradient(180deg, var(--gold), var(--rose));
+    animation:eq 1.1s ease-in-out infinite;
+    opacity:0.85;
+  }
+  .eq-bar:nth-child(1){animation-delay:0s;}
+  .eq-bar:nth-child(2){animation-delay:0.15s;}
+  .eq-bar:nth-child(3){animation-delay:0.3s;}
+  .eq-bar:nth-child(4){animation-delay:0.1s;}
+  .eq-bar:nth-child(5){animation-delay:0.25s;}
+  @keyframes eq{
+    0%,100%{height:8px;}
+    50%{height:26px;}
+  }
+  #eqBars.paused .eq-bar{animation-play-state:paused; height:8px;}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<section class="hero">
+  <div class="eyebrow">سنة وخمس شهور ونص واحنا بعاد عن بعض</div>
+  <h1>ميرا، لسه بختارك انتِ. <span class="pulse">♡</span></h1>
+  <div class="sub">رسالة كان المفروض أكتبها من زمان</div>
+  <div class="scroll-cue">مرري لتحت ↓</div>
+</section>
+
+<section class="gap-section">
+  <div class="gap-label">المسافة اللي بينا</div>
+  <div class="gap-track" id="gapTrack">
+    <div class="gap-line"><div class="gap-fill"></div></div>
+    <div class="gap-points">
+      <div class="gap-dot"></div>
+      <div class="gap-dot"></div>
+    </div>
+    <div class="gap-caption">
+      <span>وقت ما خسرتك</span>
+      <span>وقفتي واقف، مستنيكي</span>
+    </div>
+    <div class="gap-time">١٧ شهر وأنا باشتقلك. باستعيد كل اللي ضيعته. وباحاول ابقى واحد يستاهل يحافظ عليكي.</div>
+  </div>
+</section>
+
+<section class="gap-section" style="min-height:auto; padding:8vh 6vw;">
+  <div class="gap-label" style="margin-bottom:1.6rem;">١٧ أغسطس</div>
+  <div style="max-width:640px; text-align:center;">
+    <p style="font-family:'Amiri', serif; font-size:clamp(1.15rem,3vw,1.5rem); line-height:2.1; color:var(--paper);">
+      متفكراه؟ إحنا اتقابلنا وكنا مخططين لليوم ده من شهر كامل.
+      أنا جيت جايبلك حظاظتين سبايدرمان، وانتِ جيبتيلي شوكولاتة.
+    </p>
+    <p style="font-family:'Amiri', serif; font-style:italic; font-size:clamp(1.2rem,3.2vw,1.6rem); line-height:2.1; color:var(--gold-soft); margin-top:1.6rem;">
+      أول ما شفتك حسيت اني عايز اتنطط من الفرحة. اتبسطت أوي.
+      كنتي أحلى حاجة شفتها في حياتي.
+    </p>
+    <p style="font-family:'Amiri', serif; font-size:clamp(1.15rem,3vw,1.5rem); line-height:2.1; color:var(--paper); margin-top:1.6rem;">
+      كان نفسي نوقف مع بعض ونخد صورة للذكرى، حتى بس بالحظاظات — بس ماخدناهاش.
+      وقعدت قصادك على الكرسي، وأنا باصلك ومبتسم مش مصدق
+      إن دي حبيبتي، ومش مصدق إنك بتحبيني.
+    </p>
+    <p style="font-family:'Amiri', serif; font-weight:700; font-size:clamp(1.3rem,3.6vw,1.8rem); line-height:1.8; color:var(--rose); margin-top:2.2rem;">
+      نفسي نبقى مع بعض تاني، ونعمل ذكريات جديدة. مش عايزك تمشي. بحبك.
+    </p>
+  </div>
+</section>
+
+<section class="gap-section" style="min-height:auto; padding:6vh 6vw;">
+  <div class="gap-label" style="margin-bottom:1.6rem;">أغنيتنا</div>
+  <div style="width:min(560px,90vw); text-align:center;">
+    <div style="font-family:'Amiri',serif; font-style:italic; font-size:1.3rem; color:var(--gold-soft); margin-bottom:1.4rem;">Rewrite the Stars</div>
+    <div style="position:relative; width:100%; border-radius:12px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4); background:var(--ink-soft); padding:2rem 1.5rem;">
+      <audio id="songPlayer" src="rewrite-the-stars.m4a" preload="auto" loop></audio>
+      <div style="display:flex; align-items:center; justify-content:center; gap:0.5rem; margin-bottom:1.4rem;" id="eqBars">
+        <span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span>
+      </div>
+      <div style="font-size:0.95rem; color:rgba(242,236,225,0.7);">James Arthur &amp; Anne-Marie</div>
+    </div>
+    <div style="margin-top:1.2rem; font-size:0.9rem; color:rgba(242,236,225,0.5);" id="musicHint">بتشتغل بهدوء في الخلفية</div>
+  </div>
+</section>
+
+<section class="letter-section">
+  <div class="letter" id="letter">
+    <p class="lead">ميرا... بحبك أوي.</p>
+    <p>إنتِ أحسن إنسانة عرفتها في حياتي.</p>
+    <p>لو قدرت ارجع في الزمن، هختار احبك تاني من الأول. لسه بحبك أوي، وأنا اتغيرت في كل حاجة — مش زي زمان. بقيت إنسان تاني خالص.</p>
+    <p>عايز أجرب معاكي تاني. مرة أخيرة.</p>
+    <p>دلوقتي باعرف أحبك صح. أعرف أعتني بيكي. باعرف كل حاجة عنكي، وباتذكر كل حاجة، ومستعد اضحي بأي حاجة عشانك.</p>
+    <p>فياريت نجرب بداية جديدة مع بعض — نحب بعض بحب صافي زي الأول. هخليكي أسعد واحدة في الدنيا.</p>
+    <p class="lead">بحبك.</p>
+    <div class="sign">— مكتوبة عشانك انتِ، ومحدش غيرك</div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-eyebrow">السؤال اللي كنت خايف أسأله</div>
+  <h2>ميرا، ممكن نبدأ من الأول تاني — بداية جديدة، إحنا الاتنين بس؟</h2>
+  <div class="cta-buttons">
+    <button class="choice primary" id="yesBtn">أيوة، يلا نبدأ من الأول</button>
+    <button class="choice secondary" id="noBtn">لسه مش جاهزة</button>
+  </div>
+  <div class="response" id="response"></div>
+</section>
+
+<footer>اتكتبت بهدوء، وقصدها كامل</footer>
+
+<script>
+  const songPlayer = document.getElementById('songPlayer');
+  const eqBars = document.getElementById('eqBars');
+  let unmuted = false;
+  const musicHint = document.getElementById('musicHint');
+
+  if(songPlayer){
+    songPlayer.muted = true;
+    songPlayer.play().catch(() => {});
+    if(eqBars) eqBars.classList.add('paused');
+  }
+
+  function tryUnmute(){
+    if(unmuted || !songPlayer) return;
+    songPlayer.muted = false;
+    songPlayer.volume = 0.7;
+    songPlayer.play().catch(() => {});
+    if(eqBars) eqBars.classList.remove('paused');
+    unmuted = true;
+    if(musicHint) musicHint.textContent = 'بتشتغل بهدوء في الخلفية';
+    window.removeEventListener('click', tryUnmute);
+    window.removeEventListener('scroll', tryUnmute);
+    window.removeEventListener('keydown', tryUnmute);
+    window.removeEventListener('touchstart', tryUnmute);
+  }
+
+  if(musicHint) musicHint.textContent = 'دوسي أو مرري عشان الصوت يشتغل';
+  window.addEventListener('click', tryUnmute);
+  window.addEventListener('scroll', tryUnmute);
+  window.addEventListener('keydown', tryUnmute);
+  window.addEventListener('touchstart', tryUnmute);
+
+  const starsContainer = document.getElementById('stars');
+  const starCount = window.innerWidth < 600 ? 26 : 46;
+  for(let i=0; i<starCount; i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = Math.random()*100 + 'vw';
+    s.style.top = Math.random()*100 + 'vh';
+    s.style.animationDelay = (Math.random()*5) + 's';
+    s.style.animationDuration = (4 + Math.random()*4) + 's';
+    starsContainer.appendChild(s);
+  }
+
+  const letterPs = document.querySelectorAll('.letter p');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if(entry.isIntersecting){
+        const target = entry.target;
+        const index = Array.from(letterPs).indexOf(target);
+        setTimeout(() => target.classList.add('visible'), index * 260);
+        revealObserver.unobserve(target);
+      }
+    });
+  }, {threshold:0.3});
+  letterPs.forEach(p => revealObserver.observe(p));
+
+  const gapTrack = document.getElementById('gapTrack');
+  const gapObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        gapTrack.classList.add('in-view');
+        gapObserver.unobserve(gapTrack);
+      }
+    });
+  }, {threshold:0.5});
+  gapObserver.observe(gapTrack);
+
+  const responseEl = document.getElementById('response');
+  document.getElementById('yesBtn').addEventListener('click', () => {
+    responseEl.textContent = "شكراً يا ميرا. أعدك مش هتندمي. بحبك.";
+    responseEl.classList.add('shown');
+    setTimeout(() => { window.location.href = 'us-again-ar.html'; }, 2600);
+  });
+  document.getElementById('noBtn').addEventListener('click', () => {
+    responseEl.textContent = "فاهم. خدي كل الوقت اللي محتاجاه — هفضل موجود، ولسه بحبك.";
+    responseEl.classList.add('shown');
+    setTimeout(() => { window.location.href = 'take-your-time-ar.html'; }, 2600);
+  });
+</script>
+
+</body>
+</html>
